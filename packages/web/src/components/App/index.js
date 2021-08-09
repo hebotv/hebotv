@@ -43,7 +43,7 @@ function App() {
     }
   };
   return (
-    <Container className={classes.root}>
+    <div className={classes.root}>
       {
         path === '/home' ?
         (
@@ -63,7 +63,7 @@ function App() {
       <Backdrop className={classes.backdrop} open={loading}>
         <CircularProgress color="inherit" />
       </Backdrop>
-    </Container>
+    </div>
   );
 }
 
