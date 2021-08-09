@@ -1,0 +1,15 @@
+{
+  "name": "hebotv",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "GPL-3.0",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "app": "yarn workspace hebotv-app start",
+    "web": "yarn workspace hebotv-web start"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0"
+  }
+}
