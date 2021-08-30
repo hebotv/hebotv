@@ -32,7 +32,11 @@ app.whenReady().then(() => {
     callback({ requestHeaders: details.requestHeaders })
   });
   session.defaultSession.webRequest.onHeadersReceived(CORSfilter, (details, callback) => {
-    details.responseHeaders['Access-Control-Allow-Origin'] = '*';
+    if (details.responseHeaders['access-control-allow-origin']) {
+      details.responseHeaders['access-control-allow-origin'] = ['*'];
+    } else {
+      details.responseHeaders['Access-Control-Allow-Origin'] = ['*'];
+    }
     callback({ responseHeaders: details.responseHeaders })
   });
   createWindow();
