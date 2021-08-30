@@ -8,7 +8,7 @@ import InputBase from '@material-ui/core/InputBase';
 import HomeIcon from '@material-ui/icons/Home';
 import SearchIcon from '@material-ui/icons/Search';
 
-import Channels from '../Channels';
+import Channels from './Channels';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,17 +65,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ChannelsPage({ channels }) {
+function ChannelsPage({ channels, gotoHomePage, gotoChannelPage }) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-     <AppBar position="static">
+     <AppBar position="fixed">
         <Toolbar>
           <IconButton
             className={classes.menuButton}
             edge="start"
             color="inherit"
             aria-label="open drawer"
+            onClick={gotoHomePage}
           >
             <HomeIcon />
           </IconButton>
@@ -97,7 +98,7 @@ function ChannelsPage({ channels }) {
           </div>
         </Toolbar>
       </AppBar>
-      <Channels channels={channels} />
+      <Channels channels={channels} gotoChannelPage={gotoChannelPage} />
     </div>
   );
 }

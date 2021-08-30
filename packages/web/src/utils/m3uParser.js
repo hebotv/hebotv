@@ -20,7 +20,7 @@ export function parser(m3uString) {
       lists.push({
         ...parseAttributes(attributes),
         des,
-        uri: lines[lineIndex + 1]
+        uri: lines[lineIndex + 1].split('\r')[0],
       });
       lineIndex = lineIndex + 2;
     } else {

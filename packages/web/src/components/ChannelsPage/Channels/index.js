@@ -6,11 +6,12 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
+import LiveTvIcon from '@material-ui/icons/LiveTv';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    overflowY: 'auto',
+    paddingTop: '80px',
   },
   card: {
     display: 'flex',
@@ -24,9 +25,9 @@ const useStyles = makeStyles((theme) => ({
     color: grey[400],
   },
   logoContainer: {
-    width: 50,
-    display: 'flex',
-    alignItems: 'start',
+    width: '40px',
+    marginRight: '10px',
+    cursor: 'pointer',
   },
   logo: {
     backgroundColor: grey[400],
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flex: 1,
+    maxWidth: 'calc(100% - 50px)',
   },
   tag: {
     backgroundColor: grey[600],
@@ -47,9 +49,12 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '12px',
     marginRight: '5px',
   },
+  clickable: {
+    cursor: 'pointer',
+  }
 }));
 
-function ChannelLogo({ src, name, classes }) {
+function ChannelLogo({ src, name, classes, onClick }) {
   if (src) {
     return (
       <div className={classes.logoContainer}>
@@ -57,6 +62,7 @@ function ChannelLogo({ src, name, classes }) {
           classes={{ img: classes.logo }}
           src={src}
           alt={name}
+          onClick={onClick}
         />
       </div>
     );
@@ -66,22 +72,29 @@ function ChannelLogo({ src, name, classes }) {
       <Avatar
         className={classes.pinkLogo}
         alt={name}
+        onClick={onClick}
       >
-        {name.length > 2 ? name.slice(0, 2) : name}
+        { name ? (name.length > 2 ? name.slice(0, 2) : name) : <LiveTvIcon />}
       </Avatar>
     </div>
   );
 }
 
-function Channel({ name, logo, description, language, uri, country, group, classes }) {
+function Channel({ name, logo, description, language, country, group, classes, gotoChannel }) {
   return (
     <Card className={classes.card}>
-      <ChannelLogo src={logo} name={name} classes={classes} />
+      <ChannelLogo src={logo} name={name} classes={classes} onClick={gotoChannel} />
       <div className={classes.content}>
-        <Typography component="h6" variant="h6">
+        <Typography component="h6" variant="h6" onClick={gotoChannel} className={classes.clickable}>
           {name}
         </Typography>
-        <Typography variant="subtitle2" className={classes.description}>
+        <Typography
+          variant="subtitle2"
+          className={classes.description}
+          noWrap
+          onClick={gotoChannel}
+          className={classes.clickable}
+        >
           {description}
         </Typography>
         { language ? (
@@ -102,19 +115,19 @@ function Channel({ name, logo, description, language, uri, country, group, class
             </div>
           ) : null
         }
-      </div>   
+      </div>
     </Card>
   );
 }
 
-function Channels({ channels }) {
+function Channels({ channels, gotoChannelPage }) {
   const classes = useStyles();
   return (
-    <Container className={classes.root}>
+    <Container className={classes.root} maxWidth="md">
       <Grid container spacing={3}>
         {
           channels.map((channel) => (
-            <Grid item xs={6} sm={4} lg={3} key={channel['uri']}>
+            <Grid item xs={6} sm={4} key={channel['uri']}>
               <Channel
                 name={channel['tvg-name']}
                 description={channel['des']}
@@ -124,6 +137,7 @@ function Channels({ channels }) {
                 group={channel['group-title']}
                 uri={channel['uri']}
                 classes={classes}
+                gotoChannel={() => gotoChannelPage(channel)}
               />
             </Grid>
           ))

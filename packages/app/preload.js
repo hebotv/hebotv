@@ -2,22 +2,16 @@ const { ipcRenderer } = require('electron');
 
 console.log('preload');
 
-function init() {
-  console.log('init');
-  const video = document.querySelector('video');
-
-  video.addEventListener('loadedmetadata', () => {
-    ipcRenderer.send('video-loaded', {
-      width: video.videoWidth,
-      height: video.videoHeight
-    });
-  });
-}
-
 ipcRenderer.on('main-message', function (e, message) {
   // get message from main process
 });
 
-window.addEventListener('load', () => {
-  init();
+window.addEventListener('message', (e) => {
+  if (e.data && e.data.type === 'videoSize') {
+    ipcRenderer.send('video-loaded', {
+      width: e.data.width,
+      height: e.data.height
+    });
+  }
 });
+
