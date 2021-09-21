@@ -94,6 +94,7 @@ function ChannelPage({ channel }) {
           controls: true,
           responsive: true,
           fluid: true,
+          liveui: true,
           sources: [{
             src: channel.uri,
             type: 'application/x-mpegurl'
