@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 let menuVisibleTimeout = null;
 
-function ChannelPage({ channel }) {
+function ChannelPage({ channel, gotoHomePage, gotoChannelsPage }) {
   const classes = useStyles();
   const [menuVisible, setMenuVisible] = useState(true);
   useEffect(() => {
@@ -56,13 +56,14 @@ function ChannelPage({ channel }) {
   return (
     <div className={classes.root}>
       <Breadcrumbs aria-label="breadcrumb" className={breadcrumbClass}>
-        <Link color="inherit" href="/" className={classes.link}>
+        <Link color="inherit" href="#/" className={classes.link} onClick={gotoHomePage}>
           <HomeIcon className={classes.icon} />
           Home
         </Link>
         <Link
           color="inherit"
-          href="/"
+          href="#/channels"
+          onClick={gotoChannelsPage}
         >
           Channels
         </Link>

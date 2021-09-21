@@ -55,8 +55,9 @@ app.on('activate', () => {
 });
 
 ipcMain.on('video-loaded', (event, message) => {
+  // console.log(message);
   const ratio = message.width / message.height;
   const originSize = mainWindow.getContentSize();
-  mainWindow.setContentSize(originSize[0], originSize[0] / ratio);
+  mainWindow.setContentSize(originSize[0], Math.round(originSize[0] / ratio));
   mainWindow.setAspectRatio(ratio);
 });

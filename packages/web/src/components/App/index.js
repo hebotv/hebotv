@@ -3,6 +3,12 @@ import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+  useHistory
+} from "react-router-dom";
 
 import { parser } from '../../utils/m3uParser';
 
@@ -26,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  const [path, setPath] = useState('/home');
+  const history = useHistory();
   const [source, setSource] = useState('https://iptv-org.github.io/iptv/countries/cn.m3u');
   const [channels, setChannels] = useState([]);
   const [channel, setChannel] = useState({ uri: '' });
@@ -37,7 +43,7 @@ function App() {
       const response = await axios.get(source);
       const parsed = parser(response.data);
       setChannels(parsed);
-      setPath('/channels')
+      history.push('/channels')
       setLoading(false);
     } catch (e) {
       setLoading(false);
@@ -46,43 +52,46 @@ function App() {
   };
   return (
     <div className={classes.root}>
-      {
-        path === '/home' ?
-          (
-            <Home
-              source={source}
-              setSource={setSource}
-              loadSource={loadSource}
-            />
-          ) : null
-      }
-      {
-        path === '/channels' ?
-          (
-            <ChannelsPage
-              channels={channels}
-              gotoHomePage={() => setPath('/home')}
-              gotoChannelPage={(selected) => {
-                console.log(selected);
-                setChannel(selected);
-                setPath('/channel');
-              }}
-            />
-          ) : null
-      }
-      {
-        path === '/channel' ?
-          (
-            <ChannelPage
-              channel={channel}
-            />
-          ) : null
-      }
+      <Switch>
+        <Route path="/channels">
+          <ChannelsPage
+            channels={channels}
+            gotoHomePage={() => history.push('/')}
+            gotoChannelPage={(selected) => {
+              setChannel(selected);
+              history.push('/channel');
+            }}
+          />
+        </Route>
+        <Route path="/channel">
+          <ChannelPage
+            channel={channel}
+            gotoHomePage={() => history.push('/')}
+            gotoChannelsPage={() => history.push('/channels')}
+          />
+        </Route>
+        <Route path="/">
+          <Home
+            source={source}
+            setSource={setSource}
+            loadSource={loadSource}
+          />
+        </Route>
+      </Switch>
       <Backdrop className={classes.backdrop} open={loading}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </div>
+
   );
 }
 
-export default App;
+function RouterApp() {
+  return (
+    <Router>
+      <App />
+    </Router>
+  )
+}
+
+export default RouterApp;
