@@ -16,10 +16,10 @@ export function parser(m3uString) {
   while(lineIndex < lines.length) {
     let line = lines[lineIndex];
     if (lines[lineIndex].indexOf('#EXTINF') === 0) {
-      const [attributes, des] = line.split(',');
+      const [attributes, description] = line.split(',');
       lists.push({
         ...parseAttributes(attributes),
-        des,
+        des: description.split('\r')[0],
         uri: lines[lineIndex + 1].split('\r')[0],
       });
       lineIndex = lineIndex + 2;
