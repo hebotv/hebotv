@@ -15,6 +15,8 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     width: '100%',
     minHeight: '100%',
+    backgroundColor: theme.palette.background.pager,
+    color: theme.palette.text.primary,
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -46,35 +48,35 @@ function App() {
     <div className={classes.root}>
       {
         path === '/home' ?
-        (
-          <Home
-            source={source}
-            setSource={setSource}
-            loadSource={loadSource}
-          />
-        ) : null
+          (
+            <Home
+              source={source}
+              setSource={setSource}
+              loadSource={loadSource}
+            />
+          ) : null
       }
       {
         path === '/channels' ?
-        (
-          <ChannelsPage
-            channels={channels}
-            gotoHomePage={() => setPath('/home')}
-            gotoChannelPage={(selected) => {
-              console.log(selected);
-              setChannel(selected);
-              setPath('/channel');
-            }}
-          />
-        ) : null
+          (
+            <ChannelsPage
+              channels={channels}
+              gotoHomePage={() => setPath('/home')}
+              gotoChannelPage={(selected) => {
+                console.log(selected);
+                setChannel(selected);
+                setPath('/channel');
+              }}
+            />
+          ) : null
       }
       {
         path === '/channel' ?
-        (
-          <ChannelPage
-            channel={channel}
-          />
-        ) : null
+          (
+            <ChannelPage
+              channel={channel}
+            />
+          ) : null
       }
       <Backdrop className={classes.backdrop} open={loading}>
         <CircularProgress color="inherit" />
