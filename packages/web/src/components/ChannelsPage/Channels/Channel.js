@@ -103,7 +103,7 @@ export function Channel({ logo, description, language, country, group, gotoChann
             >
               {
                 tags.map(tag => (
-                  <div className={classes.tag} title={tag}>
+                  <div className={classes.tag} title={tag} key={tag}>
                     {tag}
                   </div>
                 ))

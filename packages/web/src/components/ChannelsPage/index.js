@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
@@ -65,8 +65,45 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+let filterTimeout = null;
 function ChannelsPage({ channels, gotoHomePage, gotoChannelPage }) {
   const classes = useStyles();
+  const [searchString, setSearchString] = useState('');
+  const [filteredChannels, setFilteredChannels] = useState(channels);
+
+  useEffect(() => {
+    if (searchString.length === 0) {
+      setFilteredChannels(channels);
+    }
+    if (filterTimeout) {
+      clearTimeout(filterTimeout);
+      filterTimeout = null;
+    }
+    let filterStr = searchString.toLowerCase();
+    filterTimeout = setTimeout(() => {
+      setFilteredChannels(channels.filter((channel) => {
+        let found = false;
+        Object.keys(channel).forEach((key) => {
+          if (found) {
+            return;
+          }
+          if (!channel[key] || typeof channel[key] !== 'string') {
+            return;
+          }
+          found = channel[key].toLowerCase().indexOf(filterStr) > -1
+        });
+        return found;
+      }))
+    }, 500);
+  }, [searchString, channels]);
+
+  useEffect(() => {
+    if (filterTimeout) {
+      clearTimeout(filterTimeout);
+      filterTimeout = null;
+    }
+  }, []);
+  // TODO: filter and search
   return (
     <div className={classes.root}>
      <AppBar position="fixed">
@@ -89,6 +126,9 @@ function ChannelsPage({ channels, gotoHomePage, gotoChannelPage }) {
             </div>
             <InputBase
               placeholder="Search…"
+              onChange={(event) => {
+                setSearchString(event.target.value);
+              }}
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
@@ -98,7 +138,7 @@ function ChannelsPage({ channels, gotoHomePage, gotoChannelPage }) {
           </div>
         </Toolbar>
       </AppBar>
-      <Channels channels={channels} gotoChannelPage={gotoChannelPage} />
+      <Channels channels={filteredChannels} gotoChannelPage={gotoChannelPage} />
     </div>
   );
 }

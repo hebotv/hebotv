@@ -27,7 +27,6 @@ function Channels({ channels, gotoChannelPage }) {
   const [mappedChannels, setMappedChannels] = useState([]);
   const windowSize = useWindowDimensions();
   useEffect(() => {
-    console.log(channels);
     let columnCount;
     if (windowSize.width >= 600) {
       columnCount = 3;
