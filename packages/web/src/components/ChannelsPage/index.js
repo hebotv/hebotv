@@ -70,7 +70,7 @@ function ChannelsPage({ channels, gotoHomePage, gotoChannelPage }) {
   return (
     <div className={classes.root}>
      <AppBar position="fixed">
-        <Toolbar>
+        <Toolbar variant="dense">
           <IconButton
             className={classes.menuButton}
             edge="start"
