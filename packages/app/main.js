@@ -21,13 +21,14 @@ function createWindow () {
 }
 
 const CORSfilter = {
-  urls: ['*://*/*.m3u', '*://*/*.m3u8', '*://*/*.ts', '*://*/*.jpg', '*://*/*.jpg']
+  urls: ['*://*/*.m3u*', '*://*/*.ts', '*://*/*.ts*', '*://*/*.jpg', '*://*/*.jpg*', '*://*/*.png'],
 };
 
 app.whenReady().then(() => {
   session.defaultSession.webRequest.onBeforeSendHeaders(CORSfilter, (details, callback) => {
-    details.requestHeaders['User-Agent'] = null;
-    details.requestHeaders['Origin'] = null;
+    const url = new URL(details.url);
+    details.requestHeaders['User-Agent'] = details.requestHeaders['User-Agent'].replace('Electron', 'App');
+    details.requestHeaders['Origin'] = url.origin;
     details.requestHeaders['Referer'] = details.url;
     callback({ requestHeaders: details.requestHeaders })
   });
@@ -56,6 +57,9 @@ app.on('activate', () => {
 
 ipcMain.on('video-loaded', (event, message) => {
   // console.log(message);
+  if (message.height === 0) {
+    return;
+  }
   const ratio = message.width / message.height;
   const originSize = mainWindow.getContentSize();
   mainWindow.setContentSize(originSize[0], Math.round(originSize[0] / ratio));
