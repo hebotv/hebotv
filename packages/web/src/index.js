@@ -15,6 +15,16 @@ const theme = createTheme({
       dark: '#101010',
     }
   },
+  overrides: {
+    MuiOutlinedInput: {
+      root: {
+        '&$focused $notchedOutline': {
+          borderColor: '#fff',
+          borderWidth: '1px',
+        },
+      },
+    }
+  }
 });
 
 ReactDOM.render(
