@@ -21,7 +21,7 @@ function createWindow () {
 }
 
 const CORSfilter = {
-  urls: ['*://*/*.m3u', '*://*/*.m3u8', '*://*/*.ts']
+  urls: ['*://*/*.m3u', '*://*/*.m3u8', '*://*/*.ts', '*://*/*.jpg', '*://*/*.jpg']
 };
 
 app.whenReady().then(() => {
