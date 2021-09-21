@@ -10,7 +10,8 @@
     "classnames": "^2.3.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-router-dom": "5.3.0",
+    "react-router-dom": "^5.3.0",
+    "use-global-storage": "^0.1.0",
     "video.js": "^7.14.3"
   },
   "devDependencies": {
