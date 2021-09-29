@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ThemeProvider, createTheme } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 import './index.css';
 import App from './components/App';
@@ -9,22 +9,17 @@ import App from './components/App';
 
 const theme = createTheme({
   palette: {
-    type: 'dark',
+    mode: 'dark',
     primary: {
       main: '#202020',
-      dark: '#101010',
-    }
+    },
+    secondary: {
+      main: '#f50057',
+    },
+    background: {
+      default: '#303030',
+    },
   },
-  overrides: {
-    MuiOutlinedInput: {
-      root: {
-        '&$focused $notchedOutline': {
-          borderColor: '#fff',
-          borderWidth: '1px',
-        },
-      },
-    }
-  }
 });
 
 ReactDOM.render(

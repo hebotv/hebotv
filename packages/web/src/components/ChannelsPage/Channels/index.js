@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import { FixedSizeList } from 'react-window';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
 import { Channel } from './Channel';
 import { useWindowDimensions } from './useWindowDimensions';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  listColumn: {
-    maxWidth: '960px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    [theme.breakpoints.down('md')]: {
-      width: '100%',
-      paddingLeft: '20px',
-      paddingRight: '20px',
-    },
+const Root = styled('div')({
+  display: 'flex',
+});
+
+const ListColumn = styled(Grid)(({ theme }) => ({
+  maxWidth: '960px',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  [theme.breakpoints.down('md')]: {
+    width: '100%',
+    paddingLeft: '20px',
+    paddingRight: '20px',
   },
 }));
 
 function Channels({ channels, gotoChannelPage }) {
-  const classes = useStyles();
   const [mappedChannels, setMappedChannels] = useState([]);
   const windowSize = useWindowDimensions();
   useEffect(() => {
@@ -48,7 +47,7 @@ function Channels({ channels, gotoChannelPage }) {
     }
     return (
       <div style={style}>
-        <Grid container spacing={3} className={classes.listColumn}>
+        <ListColumn container spacing={3}>
           {
             columnChannels.map((channel) => (
               <Grid item xs={6} sm={4} key={channel['uri']}>
@@ -64,22 +63,31 @@ function Channels({ channels, gotoChannelPage }) {
               </Grid>
             ))
           }
-        </Grid>
+        </ListColumn>
       </div>
     );
   };
+  Column.propTypes = {
+    index: PropTypes.number.isRequired,
+    style: PropTypes.object.isRequired,
+  };
   return (
-    <div className={classes.root}>
+    <Root>
       <FixedSizeList
         itemCount={mappedChannels.length + 1}
-        itemSize={91}
+        itemSize={85}
         width={'100%'}
         height={windowSize.height}
       >
         {Column}
       </FixedSizeList>
-    </div>
+    </Root>
   );
 }
+
+Channels.propTypes = {
+  channels: PropTypes.array.isRequired,
+  gotoChannelPage: PropTypes.func.isRequired,
+};
 
 export default Channels;

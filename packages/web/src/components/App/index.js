@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import useGlobalStorage from 'use-global-storage';
-import { makeStyles } from '@material-ui/core/styles';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { styled } from '@mui/material/styles';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import {
   HashRouter as Router,
   Switch,
@@ -17,18 +17,17 @@ import Home from '../Home';
 import ChannelsPage from '../ChannelsPage';
 import ChannelPage from '../ChannelPage';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    position: 'relative',
-    width: '100%',
-    minHeight: '100%',
-    backgroundColor: theme.palette.background.pager,
-    color: theme.palette.text.primary,
-  },
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
-  },
+const StyledRoot = styled('div')(({ theme }) => ({
+  position: 'relative',
+  width: '100%',
+  minHeight: '100%',
+  backgroundColor: theme.palette.background.default,
+  color: theme.palette.text.primary,
+}));
+
+const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  color: theme.palette.text.primary,
 }));
 
 const useStorage = useGlobalStorage({
@@ -36,7 +35,6 @@ const useStorage = useGlobalStorage({
 });
 
 function App() {
-  const classes = useStyles();
   const history = useHistory();
   const [source, setSource] = useStorage('source', 'https://iptv-org.github.io/iptv/index.m3u');
   const [channels, setChannels] = useStorage('channels', []);
@@ -56,7 +54,7 @@ function App() {
     }
   };
   return (
-    <div className={classes.root}>
+    <StyledRoot>
       <Switch>
         <Route path="/channels">
           <ChannelsPage
@@ -83,11 +81,10 @@ function App() {
           />
         </Route>
       </Switch>
-      <Backdrop className={classes.backdrop} open={loading}>
+      <StyledBackdrop open={loading}>
         <CircularProgress color="inherit" />
-      </Backdrop>
-    </div>
-
+      </StyledBackdrop>
+    </StyledRoot>
   );
 }
 

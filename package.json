@@ -10,6 +10,6 @@
     "web": "yarn workspace hebotv-web start"
   },
   "devDependencies": {
-    "eslint": "^6.6.0"
+    "eslint": "^7.32.0"
   }
 }

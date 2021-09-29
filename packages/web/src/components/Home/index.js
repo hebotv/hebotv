@@ -1,54 +1,77 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import SendIcon from '@material-ui/icons/Send';
+import PropTypes from 'prop-types';
+import { styled, alpha } from '@mui/material/styles';
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
 
-const useStyles = makeStyles(() => ({
-  centerBlock: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    textAlign: 'center',
+const StyledContainer = styled(Container)({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  textAlign: 'center',
+});
+
+const StyledTypography = styled(Typography)({
+  margin: '20px',
+});
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  width: '100%',
+  marginBottom: '20px',
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: theme.palette.grey[500],
+    },
+    '&.Mui-focused fieldset': {
+      border: 'solid 1px',
+      borderColor: theme.palette.grey[100],
+    },
   },
-  start: {
-    margin: '20px',
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.grey[300],
+  borderColor: theme.palette.grey[400],
+  '&:hover': {
+    color: theme.palette.grey[100],
+    borderColor: theme.palette.grey[100],
+    boxShadow: `${alpha(theme.palette.grey[100], 0.1)} 0 0 0 2px`,
   },
-  input: {
-    width: '100%',
-    marginBottom: '20px',
-  }
 }));
 
 function Home({ source, setSource, loadSource }) {
-  const classes = useStyles();
   return (
-    <Container className={classes.centerBlock} maxWidth="sm">
-      <Typography className={classes.start} variant="h5" align="center">
+    <StyledContainer maxWidth="sm">
+      <StyledTypography variant="h5" align="center">
         Input IPTV M3U URI
-      </Typography>
-      <TextField
-        className={classes.input}
+      </StyledTypography>
+      <StyledTextField
         variant="outlined"
         value={source}
         onChange={(event) => {
           setSource(event.target.value);
         }}
       />
-      <Button
+      <StyledButton
         size="large"
-        variant="contained"
-        color="primary"
+        variant="outlined"
         endIcon={<SendIcon />}
         onClick={loadSource}
       >
         Start
-      </Button>
-    </Container>
+      </StyledButton>
+    </StyledContainer>
   );
 }
+
+Home.propTypes = {
+  setSource: PropTypes.func.isRequired,
+  loadSource: PropTypes.func.isRequired,
+  source: PropTypes.string.isRequired,
+};
 
 export default Home;

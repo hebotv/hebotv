@@ -1,117 +1,143 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { pink, grey } from '@material-ui/core/colors';
-import Card from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
-import LiveTvIcon from '@material-ui/icons/LiveTv';
+import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+import { pink } from '@mui/material/colors';
+import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import LiveTvIcon from '@mui/icons-material/LiveTv';
 
-const useStyles = makeStyles((theme) => ({
-  card: {
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'row',
-    backgroundColor: grey[700],
-    color: theme.palette.getContrastText(grey[700]),
-    padding: '10px',
-  },
-  description: {
-    color: grey[400],
-  },
-  logoContainer: {
-    width: '40px',
-    marginRight: '10px',
-    cursor: 'pointer',
-  },
-  logo: {
-    backgroundColor: grey[400],
-    objectFit: 'contain',
-  },
-  pinkLogo: {
-    color: theme.palette.getContrastText(pink[500]),
-    backgroundColor: pink[500],
-  },
-  content: {
-    flex: 1,
-    maxWidth: 'calc(100% - 50px)',
-  },
-  tags: {
-    overflow: 'auto',
-    height: '26px',
-  },
-  tag: {
-    backgroundColor: grey[600],
-    borderRadius: '10px',
-    display: 'inline-block',
-    padding: '2px 5px',
-    fontSize: '12px',
-    marginRight: '5px',
-    marginTop: '5px',
-  },
-  clickable: {
-    cursor: 'pointer',
-  }
+const StyledCard = styled(Card)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  flexDirection: 'row',
+  backgroundColor: theme.palette.grey[700],
+  color: theme.palette.getContrastText(theme.palette.grey[700]),
+  padding: '10px',
 }));
 
-function ChannelLogo({ src, name, onClick, classes }) {
+const Description = styled(Typography)(({ theme }) => ({
+  color: theme.palette.grey[400],
+  cursor: 'pointer',
+}));
+
+const LogoContainer = styled('div')({
+  width: '40px',
+  marginRight: '10px',
+  cursor: 'pointer',
+});
+
+const Logo = styled(Avatar)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[400],
+  objectFit: 'contain',
+}));
+
+const PinkLogo = styled(Avatar)(({ theme }) => ({
+  color: theme.palette.getContrastText(pink[500]),
+  backgroundColor: pink[500],
+}));
+
+const Content = styled('div')({
+  flex: 1,
+  maxWidth: 'calc(100% - 50px)',
+});
+
+const TagsContainer = styled('div')({
+  overflow: 'auto',
+  height: '26px',
+});
+
+const Tag = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.grey[600],
+  borderRadius: '10px',
+  display: 'inline-block',
+  padding: '2px 5px',
+  fontSize: '12px',
+  marginRight: '5px',
+  marginTop: '5px',
+}));
+
+function ChannelLogo({ src, name, onClick }) {
   if (src) {
     return (
-      <div className={classes.logoContainer}>
-        <Avatar
-          classes={{ img: classes.logo }}
+      <LogoContainer>
+        <Logo
           src={src}
           alt={name}
           onClick={onClick}
         />
-      </div>
+      </LogoContainer>
     );
   }
   return (
-    <div className={classes.logoContainer}>
-      <Avatar
-        className={classes.pinkLogo}
+    <LogoContainer>
+      <PinkLogo
         alt={name}
         onClick={onClick}
       >
         { name ? (name.length > 2 ? name.slice(0, 2) : name) : <LiveTvIcon />}
-      </Avatar>
-    </div>
+      </PinkLogo>
+    </LogoContainer>
   );
 }
 
+ChannelLogo.propTypes = {
+  src: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  onClick: PropTypes.string.isRequired,
+};
+
+ChannelLogo.defaultProps = {
+  src: undefined,
+};
+
 export function Channel({ logo, description, language, country, group, gotoChannel }) {
-  const classes = useStyles();
   const tags = [group, country, language].filter(i => !!i);
   return (
-    <Card className={classes.card}>
-      <ChannelLogo src={logo} name={description} classes={classes} onClick={gotoChannel} />
-      <div className={classes.content}>
-        <Typography
+    <StyledCard>
+      <ChannelLogo src={logo} name={description} onClick={gotoChannel} />
+      <Content>
+        <Description
           variant="subtitle2"
-          className={classes.description}
           noWrap
           onClick={gotoChannel}
-          className={classes.clickable}
         >
           {description}
-        </Typography>
+        </Description>
         {
           tags.length > 0 ? (
-            <div
-              className={classes.tags}
+            <TagsContainer
               title={tags.join(',')}
             >
               {
                 tags.map(tag => (
-                  <div className={classes.tag} title={tag} key={tag}>
+                  <Tag title={tag} key={tag}>
                     {tag}
-                  </div>
+                  </Tag>
                 ))
               }
-            </div>
+            </TagsContainer>
           ) : null
         }
-      </div>
-    </Card>
+      </Content>
+    </StyledCard>
   );
 }
+
+Channel.propTypes = {
+  logo: PropTypes.string,
+  description: PropTypes.string.isRequired,
+  language: PropTypes.string,
+  country: PropTypes.string,
+  group: PropTypes.string,
+  gotoChannel: PropTypes.func.isRequired,
+};
+
+Channel.defaultProps = {
+  logo: undefined,
+  language: undefined,
+  country: undefined,
+  group: undefined,
+};
+
+

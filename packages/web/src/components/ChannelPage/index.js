@@ -1,48 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Link from '@material-ui/core/Link';
-import HomeIcon from '@material-ui/icons/Home';
+import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
+import HomeIcon from '@mui/icons-material/Home';
 
 import { VideoPlayer } from './VideoPlayer';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    position: 'relative',
-    width: '100%',
-    minHeight: '100%',
-  },
-  hidden: {
-    display: 'none',
-  },
-  breadcrumbs: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    backgroundColor: 'rgba(43, 51, 63, 0.7)',
-    color: '#fff',
-    padding: '0 10px',
-    zIndex: 999,
-    lineHeight: '30px',
-    height: '30px',
-    fontSize: '13px',
-  },
-  link: {
-    display: 'flex',
-  },
-  icon: {
-    marginRight: theme.spacing(0.5),
-    marginTop: theme.spacing(0.5),
-    width: 20,
-    height: 20,
-  },
+const Root = styled('div')({
+  position: 'relative',
+  width: '100%',
+  minHeight: '100%',
+});
+
+const StyledBreadcrumbs = styled(Breadcrumbs)({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: '100%',
+  backgroundColor: 'rgba(43, 51, 63, 0.7)',
+  color: '#fff',
+  padding: '0 10px',
+  zIndex: 999,
+  lineHeight: '30px',
+  height: '30px',
+  fontSize: '13px',
+});
+
+const StyledLink = styled(Link)({
+  display: 'flex',
+});
+
+const StyledHomeIcon = styled(HomeIcon)(({ theme}) => ({
+  marginRight: theme.spacing(0.5),
+  marginTop: theme.spacing(0.5),
+  width: 20,
+  height: 20,
 }));
 
 let menuVisibleTimeout = null;
 
 function ChannelPage({ channel, gotoHomePage, gotoChannelsPage }) {
-  const classes = useStyles();
   const [menuVisible, setMenuVisible] = useState(true);
   useEffect(() => {
     return () => {
@@ -52,14 +50,13 @@ function ChannelPage({ channel, gotoHomePage, gotoChannelsPage }) {
       }
     }
   }, [])
-  const breadcrumbClass = menuVisible ? classes.breadcrumbs : classes.hidden;
   return (
-    <div className={classes.root}>
-      <Breadcrumbs aria-label="breadcrumb" className={breadcrumbClass}>
-        <Link color="inherit" href="#/" className={classes.link} onClick={gotoHomePage}>
-          <HomeIcon className={classes.icon} />
+    <Root>
+      <StyledBreadcrumbs aria-label="breadcrumb" hidden={!menuVisible}>
+        <StyledLink color="inherit" href="#/" onClick={gotoHomePage}>
+          <StyledHomeIcon />
           Home
-        </Link>
+        </StyledLink>
         <Link
           color="inherit"
           href="#/channels"
@@ -67,10 +64,10 @@ function ChannelPage({ channel, gotoHomePage, gotoChannelsPage }) {
         >
           Channels
         </Link>
-        <span className={classes.link}>
+        <span>
           {channel.name || channel.des}
         </span>
-      </Breadcrumbs>
+      </StyledBreadcrumbs>
       <VideoPlayer
         onMouseEnter={() => {
           if (menuVisibleTimeout) {
@@ -102,8 +99,14 @@ function ChannelPage({ channel, gotoHomePage, gotoChannelsPage }) {
           }]
         }}
       />
-    </div>
-  )
+    </Root>
+  );
 }
+
+ChannelPage.propTypes = {
+  channel: PropTypes.object.isRequired,
+  gotoHomePage: PropTypes.func.isRequired,
+  gotoChannelsPage: PropTypes.func.isRequired,
+};
 
 export default ChannelPage;

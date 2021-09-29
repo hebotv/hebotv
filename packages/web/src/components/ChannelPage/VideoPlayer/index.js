@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import videojs from 'video.js'
 import './index.css';
 
@@ -51,5 +52,18 @@ export const VideoPlayer = (props) => {
     </div>
   );
 }
+
+VideoPlayer.propTypes = {
+  options: PropTypes.object.isRequired,
+  onReady: PropTypes.func,
+  onMouseEnter: PropTypes.func,
+  onMouseLeave: PropTypes.func,
+};
+
+VideoPlayer.defaultProps = {
+  onReady: undefined,
+  onMouseEnter: undefined,
+  onMouseLeave: undefined,
+};
 
 export default VideoPlayer;

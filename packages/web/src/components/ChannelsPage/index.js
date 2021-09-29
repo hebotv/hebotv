@@ -1,59 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { alpha, makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
-import HomeIcon from '@material-ui/icons/Home';
-import SearchIcon from '@material-ui/icons/Search';
+import React, { useState, useEffect, useMemo } from 'react';
+import PropTypes from 'prop-types';
+import { alpha, styled } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import InputBase from '@mui/material/InputBase';
+import HomeIcon from '@mui/icons-material/Home';
+import SearchIcon from '@mui/icons-material/Search';
 
 import Channels from './Channels';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
+const MenuButton = styled(IconButton)(({ theme }) => ({
+  marginRight: theme.spacing(2),
+}));
+
+const Title = styled(Typography)(({ theme }) => ({
+  flexGrow: 1,
+  display: 'none',
+  [theme.breakpoints.up('sm')]: {
+    display: 'block',
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
+}));
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  title: {
-    flexGrow: 1,
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
   },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(1),
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-  },
-  inputInput: {
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('sm')]: {
@@ -65,12 +65,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function getGroupNames(channels) {
+  const groups = {};
+  channels.forEach((channel) => {
+    if (channel['group-title'] && !groups[channel['group-title']]) {
+      groups[channel['group-title']] = 1;
+    }
+  });
+  return Object.keys(groups);
+}
+
 let filterTimeout = null;
 function ChannelsPage({ channels, gotoHomePage, gotoChannelPage }) {
-  const classes = useStyles();
   const [searchString, setSearchString] = useState('');
   const [filteredChannels, setFilteredChannels] = useState(channels);
-
+  const filters = useMemo(() => getGroupNames(channels), [channels]);
+  console.log(filters);
   useEffect(() => {
     if (searchString.length === 0) {
       setFilteredChannels(channels);
@@ -105,42 +115,43 @@ function ChannelsPage({ channels, gotoHomePage, gotoChannelPage }) {
   }, []);
   // TODO: filter and search
   return (
-    <div className={classes.root}>
+    <div>
      <AppBar position="fixed">
         <Toolbar variant="dense">
-          <IconButton
-            className={classes.menuButton}
+          <MenuButton
             edge="start"
             color="inherit"
             aria-label="open drawer"
             onClick={gotoHomePage}
           >
             <HomeIcon />
-          </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
+          </MenuButton>
+          <Title variant="h6" noWrap>
             Hebo TV
-          </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
+          </Title>
+          <Search>
+            <SearchIconWrapper>
               <SearchIcon />
-            </div>
-            <InputBase
+            </SearchIconWrapper>
+            <StyledInputBase
               placeholder="Search…"
               onChange={(event) => {
                 setSearchString(event.target.value);
               }}
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
               inputProps={{ 'aria-label': 'search' }}
             />
-          </div>
+          </Search>
         </Toolbar>
       </AppBar>
       <Channels channels={filteredChannels} gotoChannelPage={gotoChannelPage} />
     </div>
   );
 }
+
+ChannelsPage.propTypes = {
+  channels: PropTypes.array.isRequired,
+  gotoHomePage: PropTypes.func.isRequired,
+  gotoChannelPage: PropTypes.func.isRequired,
+};
 
 export default ChannelsPage;
