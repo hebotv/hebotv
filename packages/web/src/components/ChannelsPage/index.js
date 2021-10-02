@@ -9,7 +9,7 @@ import InputBase from '@mui/material/InputBase';
 import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
 
-import { CategorySelect } from './CategorySelect';
+import { FiltersSelect } from './FiltersSelect';
 import Channels from './Channels';
 
 const MenuButton = styled(IconButton)(({ theme }) => ({
@@ -75,6 +75,9 @@ function ChannelsPage({
   categories,
   selectedCategories,
   setSelectedCategories,
+  languages,
+  selectedLanguages,
+  setSelectedLanguages,
 }) {
   return (
     <div>
@@ -91,12 +94,22 @@ function ChannelsPage({
           <Title variant="h6" noWrap>
             Hebo TV
           </Title>
-          { categories.length > 0 ? (
-              <CategorySelect
-              categories={categories}
-              onChange={setSelectedCategories}
-              selectedCategories={selectedCategories}
-            />
+          { languages.length > 1 ? (
+              <FiltersSelect
+                filters={languages}
+                onChange={setSelectedLanguages}
+                selectedFilters={selectedLanguages}
+                placeholder="All languages"
+              />
+            ) : null
+          }
+          { categories.length > 1 ? (
+              <FiltersSelect
+                filters={categories}
+                onChange={setSelectedCategories}
+                selectedFilters={selectedCategories}
+                placeholder="All categories"
+              />
             ) : null
           }
           <Search>
@@ -128,6 +141,9 @@ ChannelsPage.propTypes = {
   categories: PropTypes.array.isRequired,
   selectedCategories: PropTypes.array.isRequired,
   setSelectedCategories: PropTypes.func.isRequired,
+  languages: PropTypes.array.isRequired,
+  selectedLanguages: PropTypes.array.isRequired,
+  setSelectedLanguages: PropTypes.func.isRequired,
 };
 
 export default ChannelsPage;

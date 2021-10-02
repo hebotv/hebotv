@@ -18,8 +18,8 @@ const MenuProps = {
   },
 };
 
-function getSelectMenuStyles(category, selectedFilters, theme) {
-  if (selectedFilters.indexOf(category) > -1) {
+function getSelectMenuStyles(filter, selectedFilters, theme) {
+  if (selectedFilters && selectedFilters.indexOf(filter) > -1) {
     return {
       backgroundColor: theme.palette.grey[700]
     };
@@ -27,7 +27,7 @@ function getSelectMenuStyles(category, selectedFilters, theme) {
   return {};
 }
 
-export function CategorySelect({ categories, selectedCategories, onChange }) {
+export function FiltersSelect({ filters, selectedFilters, onChange, placeholder }) {
   const theme = useTheme();
   const handleChange = (event) => {
     const {
@@ -46,14 +46,14 @@ export function CategorySelect({ categories, selectedCategories, onChange }) {
     <Select
       multiple
       displayEmpty
-      value={selectedCategories}
+      value={selectedFilters}
       onChange={handleChange}
-      input={<InputBase label="Category" />}
+      input={<InputBase />}
       renderValue={(selected) => {
         if (selected.length === 0) {
           return (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              <Chip label="All Categories" />
+              <Chip label={placeholder} />
             </Box>
           );
         }
@@ -69,23 +69,24 @@ export function CategorySelect({ categories, selectedCategories, onChange }) {
       inputProps={{ 'aria-label': 'Without label' }}
     >
       <MenuItem value="all">
-        All Categories
+        {placeholder}
       </MenuItem>
-      {categories.map((category) => (
+      {filters.map((filter) => (
         <MenuItem
-          key={category}
-          value={category}
-          style={getSelectMenuStyles(category, selectedCategories, theme)}
+          key={filter}
+          value={filter}
+          style={getSelectMenuStyles(filter, selectedFilters, theme)}
         >
-          {category}
+          {filter}
         </MenuItem>
       ))}
     </Select>
   );
 }
 
-CategorySelect.propTypes = {
-  categories: PropTypes.array.isRequired,
-  selectedCategories: PropTypes.array.isRequired,
+FiltersSelect.propTypes = {
+  filters: PropTypes.array.isRequired,
+  selectedFilters: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
+  placeholder: PropTypes.string.isRequired,
 };

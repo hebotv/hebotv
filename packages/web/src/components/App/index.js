@@ -34,23 +34,32 @@ const useStorage = useGlobalStorage({
   storageOptions: { name: 'hebo-tv' },
 });
 
-function getGroupNames(channels) {
+function getChannelGroups(channels, key) {
   const groups = {};
   channels.forEach((channel) => {
-    if (channel['group-title'] && !groups[channel['group-title']]) {
-      groups[channel['group-title']] = 1;
+    if (channel[key] && !groups[channel[key]]) {
+      groups[channel[key]] = 1;
     }
   });
-  return Object.keys(groups);
+  return Object.keys(groups).sort((group1, group2) => {
+    if (group1 < group2)
+      return -1;
+    if (group1 > group2)
+      return 1;
+    return 0;
+  });
 }
 
-function filterChannels(channels, categories, searchString) {
-  if (categories.length === 0 && searchString.length === 0) {
+function filterChannels(channels, categories, searchString, languages) {
+  if (categories.length === 0 && searchString.length === 0 && languages.length === 0) {
     return channels;
   }
   const filterStr = searchString.toLowerCase();
   return channels.filter((channel) => {
     if (categories.length > 0 && categories.indexOf(channel['group-title']) === -1) {
+      return false;
+    }
+    if (languages.length > 0 && languages.indexOf(channel['tvg-language']) === -1) {
       return false;
     }
     if (filterStr.length === 0) {
@@ -79,8 +88,10 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [searchString, setSearchString] = useStorage('searchString', '');
   const [filteredChannels, setFilteredChannels] = useState(channels);
-  const categories = useMemo(() => getGroupNames(channels), [channels]);
+  const categories = useMemo(() => getChannelGroups(channels, 'group-title'), [channels]);
   const [selectedCategories, setSelectedCategories] = useStorage('selectedCategories', []);
+  const languages = useMemo(() => getChannelGroups(channels, 'tvg-language'), [channels]);
+  const [selectedLanguages, setSelectedLanguages] = useStorage('selectedLanguages', []);
   const loadSource = async () => {
     setLoading(true);
     try {
@@ -104,7 +115,7 @@ function App() {
     }
     filterTimeout = setTimeout(() => {
       setFilteredChannels(
-        filterChannels(channels, selectedCategories, searchString),
+        filterChannels(channels, selectedCategories, searchString, selectedLanguages),
       );
     }, 500);
     return () => {
@@ -113,7 +124,7 @@ function App() {
         filterTimeout = null;
       }
     }
-  }, [channels, searchString, selectedCategories]);
+  }, [channels, searchString, selectedCategories, selectedLanguages]);
 
   return (
     <Root>
@@ -131,6 +142,9 @@ function App() {
             categories={categories}
             selectedCategories={selectedCategories}
             setSelectedCategories={setSelectedCategories}
+            languages={languages}
+            selectedLanguages={selectedLanguages}
+            setSelectedLanguages={setSelectedLanguages}
           />
         </Route>
         <Route path="/channel">

@@ -92,7 +92,7 @@ ChannelLogo.defaultProps = {
 };
 
 export function Channel({ logo, description, language, country, group, gotoChannel }) {
-  const tags = [group, country, language].filter(i => !!i);
+  const tags = [group, language, country].filter(i => !!i);
   return (
     <StyledCard>
       <ChannelLogo src={logo} name={description} onClick={gotoChannel} />
