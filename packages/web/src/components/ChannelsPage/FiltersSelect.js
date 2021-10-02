@@ -7,6 +7,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 
+import { useTranslation } from 'react-i18next';
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -29,6 +31,7 @@ function getSelectMenuStyles(filter, selectedFilters, theme) {
 
 export function FiltersSelect({ filters, selectedFilters, onChange, placeholder }) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const handleChange = (event) => {
     const {
       target: { value },
@@ -60,7 +63,7 @@ export function FiltersSelect({ filters, selectedFilters, onChange, placeholder 
         return (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
             {selected.map((value) => (
-              <Chip key={value} label={value} />
+              <Chip key={value} label={t(value)} />
             ))}
           </Box>
         );
@@ -77,7 +80,7 @@ export function FiltersSelect({ filters, selectedFilters, onChange, placeholder 
           value={filter}
           style={getSelectMenuStyles(filter, selectedFilters, theme)}
         >
-          {filter}
+          {t(filter)}
         </MenuItem>
       ))}
     </Select>

@@ -19,7 +19,7 @@ const ListColumn = styled(Grid)(({ theme }) => ({
     width: '100%',
     paddingLeft: '20px',
     paddingRight: '20px',
-    '&:first-child': {
+    '&:first-of-type': {
       paddingLeft: '0px',
     }
   },

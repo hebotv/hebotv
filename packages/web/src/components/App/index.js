@@ -126,6 +126,7 @@ function App() {
       }
     }
   }, [channels, searchString, selectedCategories, selectedLanguages]);
+  window.__categories = categories;
 
   return (
     <Root>

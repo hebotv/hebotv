@@ -7,6 +7,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 
+import { useTranslation } from 'react-i18next';
+
 const StyledContainer = styled(Container)({
   position: 'absolute',
   top: '50%',
@@ -44,10 +46,11 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 function Home({ source, setSource, loadSource }) {
+  const { t } = useTranslation();
   return (
     <StyledContainer maxWidth="sm">
       <StyledTypography variant="h5" align="center">
-        Input IPTV M3U URI
+        {t('Input IPTV M3U URI')}
       </StyledTypography>
       <StyledTextField
         variant="outlined"
@@ -62,7 +65,7 @@ function Home({ source, setSource, loadSource }) {
         endIcon={<SendIcon />}
         onClick={loadSource}
       >
-        Start
+        {t('Start')}
       </StyledButton>
     </StyledContainer>
   );

@@ -5,6 +5,8 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import HomeIcon from '@mui/icons-material/Home';
 
+import { useTranslation } from 'react-i18next';
+
 import { VideoPlayer } from './VideoPlayer';
 
 const Root = styled('div')({
@@ -42,6 +44,7 @@ let menuVisibleTimeout = null;
 
 function ChannelPage({ channel, gotoHomePage, gotoChannelsPage }) {
   const [menuVisible, setMenuVisible] = useState(true);
+  const { t } = useTranslation();
   useEffect(() => {
     return () => {
       if (menuVisibleTimeout) {
@@ -55,14 +58,14 @@ function ChannelPage({ channel, gotoHomePage, gotoChannelsPage }) {
       <StyledBreadcrumbs aria-label="breadcrumb" hidden={!menuVisible}>
         <StyledLink color="inherit" href="#/" onClick={gotoHomePage}>
           <StyledHomeIcon />
-          Home
+          {t('Home')}
         </StyledLink>
         <Link
           color="inherit"
           href="#/channels"
           onClick={gotoChannelsPage}
         >
-          Channels
+          {t('Channels')}
         </Link>
         <span>
           {channel.name || channel.des}

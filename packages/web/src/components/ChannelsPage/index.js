@@ -9,6 +9,8 @@ import InputBase from '@mui/material/InputBase';
 import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
 
+import { useTranslation } from 'react-i18next';
+
 import { FiltersSelect } from './FiltersSelect';
 import Channels from './Channels';
 
@@ -79,6 +81,7 @@ function ChannelsPage({
   selectedLanguages,
   setSelectedLanguages,
 }) {
+  const { t } = useTranslation();
   return (
     <div>
      <AppBar position="fixed">
@@ -99,7 +102,7 @@ function ChannelsPage({
                 filters={languages}
                 onChange={setSelectedLanguages}
                 selectedFilters={selectedLanguages}
-                placeholder="All languages"
+                placeholder={t('All languages')}
               />
             ) : null
           }
@@ -108,7 +111,7 @@ function ChannelsPage({
                 filters={categories}
                 onChange={setSelectedCategories}
                 selectedFilters={selectedCategories}
-                placeholder="All categories"
+                placeholder={t('All categories')}
               />
             ) : null
           }
@@ -117,7 +120,7 @@ function ChannelsPage({
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder={t('Search...')}
               value={searchString}
               onChange={(event) => {
                 setSearchString(event.target.value);
