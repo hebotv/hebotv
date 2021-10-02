@@ -99,6 +99,7 @@ function App() {
       const parsed = parser(response.data);
       setSearchString('');
       setSelectedCategories([]);
+      setSelectedLanguages([]);
       setChannels(parsed);
       history.push('/channels')
       setLoading(false);
