@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
@@ -9,6 +9,7 @@ import InputBase from '@mui/material/InputBase';
 import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
 
+import { CategorySelect } from './CategorySelect';
 import Channels from './Channels';
 
 const MenuButton = styled(IconButton)(({ theme }) => ({
@@ -65,55 +66,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-function getGroupNames(channels) {
-  const groups = {};
-  channels.forEach((channel) => {
-    if (channel['group-title'] && !groups[channel['group-title']]) {
-      groups[channel['group-title']] = 1;
-    }
-  });
-  return Object.keys(groups);
-}
-
-let filterTimeout = null;
-function ChannelsPage({ channels, gotoHomePage, gotoChannelPage }) {
-  const [searchString, setSearchString] = useState('');
-  const [filteredChannels, setFilteredChannels] = useState(channels);
-  const filters = useMemo(() => getGroupNames(channels), [channels]);
-  console.log(filters);
-  useEffect(() => {
-    if (searchString.length === 0) {
-      setFilteredChannels(channels);
-    }
-    if (filterTimeout) {
-      clearTimeout(filterTimeout);
-      filterTimeout = null;
-    }
-    let filterStr = searchString.toLowerCase();
-    filterTimeout = setTimeout(() => {
-      setFilteredChannels(channels.filter((channel) => {
-        let found = false;
-        Object.keys(channel).forEach((key) => {
-          if (found) {
-            return;
-          }
-          if (!channel[key] || typeof channel[key] !== 'string') {
-            return;
-          }
-          found = channel[key].toLowerCase().indexOf(filterStr) > -1
-        });
-        return found;
-      }))
-    }, 500);
-  }, [searchString, channels]);
-
-  useEffect(() => {
-    if (filterTimeout) {
-      clearTimeout(filterTimeout);
-      filterTimeout = null;
-    }
-  }, []);
-  // TODO: filter and search
+function ChannelsPage({
+  channels,
+  gotoHomePage,
+  gotoChannelPage,
+  searchString,
+  setSearchString,
+  categories,
+  selectedCategories,
+  setSelectedCategories,
+}) {
   return (
     <div>
      <AppBar position="fixed">
@@ -129,12 +91,21 @@ function ChannelsPage({ channels, gotoHomePage, gotoChannelPage }) {
           <Title variant="h6" noWrap>
             Hebo TV
           </Title>
+          { categories.length > 0 ? (
+              <CategorySelect
+              categories={categories}
+              onChange={setSelectedCategories}
+              selectedCategories={selectedCategories}
+            />
+            ) : null
+          }
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
+              value={searchString}
               onChange={(event) => {
                 setSearchString(event.target.value);
               }}
@@ -143,7 +114,7 @@ function ChannelsPage({ channels, gotoHomePage, gotoChannelPage }) {
           </Search>
         </Toolbar>
       </AppBar>
-      <Channels channels={filteredChannels} gotoChannelPage={gotoChannelPage} />
+      <Channels channels={channels} gotoChannelPage={gotoChannelPage} />
     </div>
   );
 }
@@ -152,6 +123,11 @@ ChannelsPage.propTypes = {
   channels: PropTypes.array.isRequired,
   gotoHomePage: PropTypes.func.isRequired,
   gotoChannelPage: PropTypes.func.isRequired,
+  searchString: PropTypes.string.isRequired,
+  setSearchString: PropTypes.func.isRequired,
+  categories: PropTypes.array.isRequired,
+  selectedCategories: PropTypes.array.isRequired,
+  setSelectedCategories: PropTypes.func.isRequired,
 };
 
 export default ChannelsPage;

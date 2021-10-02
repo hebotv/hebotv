@@ -84,7 +84,7 @@ function ChannelLogo({ src, name, onClick }) {
 ChannelLogo.propTypes = {
   src: PropTypes.string,
   name: PropTypes.string.isRequired,
-  onClick: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 ChannelLogo.defaultProps = {
