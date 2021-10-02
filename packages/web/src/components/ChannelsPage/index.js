@@ -130,7 +130,12 @@ function ChannelsPage({
           </Search>
         </Toolbar>
       </AppBar>
-      <Channels channels={channels} gotoChannelPage={gotoChannelPage} />
+      <Channels
+        channels={channels}
+        gotoChannelPage={gotoChannelPage}
+        onSelectCategory={(category) => setSelectedCategories([category])}
+        onSelectLanguage={(language) => setSelectedLanguages([language])}
+      />
     </div>
   );
 }

@@ -25,7 +25,7 @@ const ListColumn = styled(Grid)(({ theme }) => ({
   },
 }));
 
-function Channels({ channels, gotoChannelPage }) {
+function Channels({ channels, gotoChannelPage, onSelectCategory, onSelectLanguage }) {
   const [mappedChannels, setMappedChannels] = useState([]);
   const windowSize = useWindowDimensions();
   useEffect(() => {
@@ -62,6 +62,8 @@ function Channels({ channels, gotoChannelPage }) {
                   group={channel['group-title']}
                   uri={channel['uri']}
                   gotoChannel={() => gotoChannelPage(channel)}
+                  onSelectCategory={onSelectCategory}
+                  onSelectLanguage={onSelectLanguage}
                 />
               </Grid>
             ))
@@ -91,6 +93,8 @@ function Channels({ channels, gotoChannelPage }) {
 Channels.propTypes = {
   channels: PropTypes.array.isRequired,
   gotoChannelPage: PropTypes.func.isRequired,
+  onSelectCategory: PropTypes.func.isRequired,
+  onSelectLanguage: PropTypes.func.isRequired,
 };
 
 export default Channels;

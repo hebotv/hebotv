@@ -55,6 +55,7 @@ const Tag = styled('div')(({ theme }) => ({
   fontSize: '12px',
   marginRight: '5px',
   marginTop: '5px',
+  cursor: 'pointer',
 }));
 
 function ChannelLogo({ src, name, onClick }) {
@@ -91,8 +92,16 @@ ChannelLogo.defaultProps = {
   src: undefined,
 };
 
-export function Channel({ logo, description, language, country, group, gotoChannel }) {
-  const tags = [group, language, country].filter(i => !!i);
+export function Channel({
+  logo,
+  description,
+  language,
+  group,
+  gotoChannel,
+  onSelectCategory,
+  onSelectLanguage,
+}) {
+  const tags = [group, language].filter(i => !!i);
   return (
     <StyledCard>
       <ChannelLogo src={logo} name={description} onClick={gotoChannel} />
@@ -110,11 +119,18 @@ export function Channel({ logo, description, language, country, group, gotoChann
               title={tags.join(',')}
             >
               {
-                tags.map(tag => (
-                  <Tag title={tag} key={tag}>
-                    {tag}
+                group ? (
+                  <Tag title={group} onClick={() => onSelectCategory(group)}>
+                    {group}
                   </Tag>
-                ))
+                ) : null
+              }
+              {
+                language ? (
+                  <Tag title={language} onClick={() => onSelectLanguage(language)}>
+                    {language}
+                  </Tag>
+                ) : null
               }
             </TagsContainer>
           ) : null
@@ -131,6 +147,8 @@ Channel.propTypes = {
   country: PropTypes.string,
   group: PropTypes.string,
   gotoChannel: PropTypes.func.isRequired,
+  onSelectCategory: PropTypes.func.isRequired,
+  onSelectLanguage: PropTypes.func.isRequired,
 };
 
 Channel.defaultProps = {
