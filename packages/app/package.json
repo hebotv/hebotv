@@ -1,12 +1,46 @@
 {
   "name": "hebotv-app",
+  "description": "A IPTV Client",
   "version": "0.0.1",
   "license": "GPL-3.0",
   "main": "main.js",
+  "author": {
+    "name" : "Embbnux Ji",
+    "email": "embbnux@embbnux.com",
+    "url" : "https://github.com/embbnux"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hebotv/hebotv.git"
+  },
   "scripts": {
-    "start": "electron ."
+    "postinstall": "electron-builder install-app-deps",
+    "start": "electron .",
+    "package": "electron-builder"
   },
   "devDependencies": {
-    "electron": "^13.1.7"
+    "electron": "15.1.2",
+    "electron-builder": "^22.13.1"
+  },
+  "build": {
+    "appId": "com.embbnux.hebotv.app",
+    "productName": "Hebo TV",
+    "copyright": "Copyright © 2021 Embbnux Ji",
+    "directories": {
+      "buildResources": "./",
+      "output": "release"
+    },
+    "mac": {
+      "category": "public.app-category.video",
+      "icon": "icon.icns"
+    },
+    "win": {
+      "target": ["nsis"]
+    },
+    "linux": {
+      "target": ["den", "AppImage", "snap", "rpm"],
+      "category": "Video",
+      "executableName": "hebotv"
+    }
   }
 }
