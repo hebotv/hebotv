@@ -12,7 +12,11 @@ function createWindow () {
       preload: path.join(__dirname, 'preload.js'),
     }
   });
-  mainWindow.loadURL('http://localhost:3000');
+  if (app.isPackaged) {
+    mainWindow.loadURL('https://hebotv.github.io/web/');
+  } else {
+    mainWindow.loadURL('http://localhost:3000');
+  }
   // and load the index.html of the app.
   // win.loadFile('index.html')
 
