@@ -1,0 +1,26 @@
+name: CI Pipeline
+
+on: [push]
+
+jobs:
+  build:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - run: yarn
+      - run: yarn workspace hebotv-web build
+      - name: Github Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          ssh-key: ${{ secrets.WEB_DEPLOY_KEY }}
+          branch: main
+          folder: packages/web/build
+          repository-name: hebotv/web
