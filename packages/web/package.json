@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "license": "GPL-3.0",
+  "homepage": "https://hebotv.github.io/web",
   "dependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
