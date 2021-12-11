@@ -7,7 +7,9 @@
   "workspaces": ["packages/*"],
   "scripts": {
     "app": "yarn workspace hebotv-app start",
-    "web": "yarn workspace hebotv-web start"
+    "web": "yarn workspace hebotv-web start",
+    "build_web": "yarn workspace hebotv-web build",
+    "package_app": "yarn workspace hebotv-app package"
   },
   "devDependencies": {
     "eslint": "^7.32.0"

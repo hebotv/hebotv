@@ -30,6 +30,13 @@
       "buildResources": "./",
       "output": "release"
     },
+    "files": [
+      "package.json",
+      "main.js",
+      "preload.js",
+      "icon.png",
+      "icon.icns"
+    ],
     "mac": {
       "category": "public.app-category.video",
       "icon": "icon.icns"
