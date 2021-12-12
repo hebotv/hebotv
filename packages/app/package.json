@@ -16,7 +16,11 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "start": "electron .",
-    "package": "electron-builder"
+    "package": "electron-builder",
+    "package-all": "electron-builder -mwl",
+    "package-linux": "electron-builder --linux -p never",
+    "package-mac": "electron-builder -m -p never",
+    "package-win": "electron-builder -w -p never"
   },
   "devDependencies": {
     "electron": "15.1.2",
@@ -26,6 +30,11 @@
     "appId": "com.embbnux.hebotv.app",
     "productName": "Hebo TV",
     "copyright": "Copyright © 2021 Embbnux Ji",
+    "publish": [{
+      "provider": "github",
+      "owner": "hebotv",
+      "repo": "hebotv"
+    }],
     "directories": {
       "buildResources": "./",
       "output": "release"
@@ -45,7 +54,7 @@
       "target": ["nsis"]
     },
     "linux": {
-      "target": ["den", "AppImage", "snap", "rpm"],
+      "target": ["deb", "AppImage", "snap", "rpm"],
       "category": "Video",
       "executableName": "hebotv"
     }
